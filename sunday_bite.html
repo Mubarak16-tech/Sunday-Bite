@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Sunday Bite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow: #F5C800;
+      --yellow-dark: #E0B800;
+      --black: #111111;
+      --white: #ffffff;
+      --gray: #555555;
+      --light-gray: #f9f9f9;
+      --font-display: 'Anton', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--black);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--yellow-dark); }
+    .nav-cta {
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 10px 22px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: #333; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #hero {
+      padding-top: 80px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero-text {
+      text-align: center;
+      padding: 64px 24px 40px;
+    }
+    .hero-text h1 {
+      font-family: var(--font-display);
+      font-size: clamp(52px, 9vw, 96px);
+      line-height: 1;
+      letter-spacing: 1px;
+      color: var(--black);
+    }
+    .hero-text p {
+      margin-top: 10px;
+      font-size: 16px;
+      color: var(--gray);
+      letter-spacing: 0.02em;
+    }
+    .hero-image-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .hero-image-wrap img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+    /* placeholder if no real image */
+    .hero-image-placeholder {
+      width: 100%;
+      height: 420px;
+      background: linear-gradient(135deg, #e8c200 0%, #f0d060 50%, #c8a800 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+    }
+    .hero-btn-wrap {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translate(-50%, 50%);
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 14px 32px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover {
+      background: var(--yellow-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--black);
+      border: 2px solid var(--black);
+      padding: 12px 28px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-outline:hover {
+      background: var(--black);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 120px 48px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .about-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+    .about-image-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #f5c800 0%, #e8a000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .about-content h2 {
+      font-family: var(--font-display);
+      font-size: 48px;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .about-content h2 span { color: var(--yellow-dark); }
+    .about-content p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--gray);
+    }
+
+    /* ── TASTE ── */
+    #taste {
+      padding: 80px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .taste-heading h2 {
+      font-family: var(--font-display);
+      font-size: 56px;
+      line-height: 1;
+    }
+    .taste-heading h2 span { color: var(--yellow-dark); }
+    .taste-heading p {
+      margin-top: 20px;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--gray);
+    }
+    .taste-cards {
+      background: var(--yellow);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .taste-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .taste-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--black);
+      color: var(--yellow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+    }
+    .taste-card-text h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--black);
+    }
+    .taste-card-text p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* ── MENU ── */
+    #menu {
+      background: var(--yellow);
+      padding: 80px 48px;
+    }
+    .menu-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .menu-left h2 {
+      font-family: var(--font-display);
+      font-size: 56px;
+      line-height: 1;
+      margin-bottom: 28px;
+    }
+    .menu-items {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .menu-card {
+      background: var(--white);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+    }
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    }
+    .menu-card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .menu-card-img-placeholder {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .menu-card-body { padding: 16px; }
+    .menu-card-body h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .menu-card-body p {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--gray);
+    }
+
+    /* ── COMMUNITY ── */
+    #community {
+      padding: 96px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #community h2 {
+      font-family: var(--font-display);
+      font-size: 52px;
+      margin-bottom: 56px;
+    }
+    #community h2 span { color: var(--yellow-dark); }
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+    .testimonial { text-align: center; }
+    .testimonial-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 16px;
+      display: block;
+    }
+    .testimonial-avatar-placeholder {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+      background: #f0e040;
+    }
+    .testimonial h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .testimonial p {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--gray);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--yellow);
+      padding: 72px 48px;
+      text-align: center;
+    }
+    footer h2 {
+      font-family: var(--font-display);
+      font-size: 64px;
+      margin-bottom: 48px;
+    }
+    .footer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+    .footer-block h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .footer-block p, .footer-block a {
+      font-size: 14px;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .footer-block a:hover { text-decoration: underline; }
+    .footer-divider {
+      width: 1px;
+      height: 1px;
+      background: rgba(0,0,0,0.15);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      #hero { padding-top: 70px; }
+      .hero-text { padding: 40px 20px 32px; }
+      .hero-image-wrap img, .hero-image-placeholder { height: 260px; }
+      #about, #taste { grid-template-columns: 1fr; padding: 80px 20px 40px; gap: 40px; }
+      .menu-inner { grid-template-columns: 1fr; gap: 32px; padding: 0; }
+      .menu-items { grid-template-columns: 1fr; }
+      #menu { padding: 64px 20px; }
+      .testimonials { grid-template-columns: 1fr; gap: 40px; }
+      #community { padding: 64px 20px; }
+      footer { padding: 56px 20px; }
+      footer h2 { font-size: 44px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">The Sunday Bite</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#taste">Why Us</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#community">Community</a></li>
+    </ul>
+    <a href="#contact" class="btn-primary">Book a Table</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-text">
+      <h1>The Sunday Bite</h1>
+      <p>Delicious food for every mood</p>
+    </div>
+    <div class="hero-image-wrap">
+      <div class="hero-image-placeholder">🍔</div>
+      <div class="hero-btn-wrap">
+        <a href="#contact" class="btn-primary">Book a Table</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-image-placeholder reveal">🤤</div>
+    <div class="about-content reveal reveal-delay-1">
+      <h2>About <span>TSB</span></h2>
+      <p>We have been serving irresistible comfort food since 2011. Our mission is to keep you smiling with every bite. Treat yourself to a feel-good meal today!</p>
+    </div>
+  </section>
+
+  <!-- TASTE -->
+  <section id="taste">
+    <div class="taste-heading reveal">
+      <h2>A Matter of <span>Taste</span></h2>
+      <p>There's a reason our regulars have been coming back for more. Word of mouth has been our only advertisement — but happy mouths are the best ambassadors!</p>
+    </div>
+    <div class="taste-cards reveal reveal-delay-1">
+      <div class="taste-card">
+        <div class="taste-num">1</div>
+        <div class="taste-card-text">
+          <h3>Fresh, Seasonal Ingredients</h3>
+          <p>Our menu follows the seasons, featuring the best local produce available.</p>
+        </div>
+      </div>
+      <div class="taste-card">
+        <div class="taste-num">2</div>
+        <div class="taste-card-text">
+          <h3>Comfort Food, Elevated</h3>
+          <p>We have simple crowd-favorites on the menu — but we do them well. Our flavors stand out, guaranteed.</p>
+        </div>
+      </div>
+      <div class="taste-card">
+        <div class="taste-num">3</div>
+        <div class="taste-card-text">
+          <h3>Better Beverages</h3>
+          <p>We're your café and barista in one, serving your favorite cuppa by turn-up, and your cocktail-of-choice by sundown.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="menu-inner">
+      <div class="menu-left reveal">
+        <h2>On the Menu</h2>
+        <a href="#" class="btn-outline">View Full Menu</a>
+      </div>
+      <div class="menu-items">
+        <div class="menu-card reveal reveal-delay-1">
+          <div class="menu-card-img-placeholder" style="background:#fde68a;">🍔</div>
+          <div class="menu-card-body">
+            <h3>Gourmet Burgers</h3>
+            <p>Packed with flavor and cooked to perfection.</p>
+          </div>
+        </div>
+        <div class="menu-card reveal reveal-delay-2">
+          <div class="menu-card-img-placeholder" style="background:#fed7aa;">🍗</div>
+          <div class="menu-card-body">
+            <h3>Chicken Wings</h3>
+            <p>Paired with dipping sauces that are too good to pass up.</p>
+          </div>
+        </div>
+        <div class="menu-card reveal reveal-delay-3">
+          <div class="menu-card-img-placeholder" style="background:#fef08a;">🍹</div>
+          <div class="menu-card-body">
+            <h3>Thirst Quenchers</h3>
+            <p>Choose from classic blends and unique concoctions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section id="community">
+    <h2 class="reveal">From Our <span>Community</span></h2>
+    <div class="testimonials">
+      <div class="testimonial reveal reveal-delay-1">
+        <div class="testimonial-avatar-placeholder">👩🏾</div>
+        <h3>Mara, TSB regular since 2015</h3>
+        <p>TSB is a huge part of my life. The staff feels like family, and they know just how I like my coffee — and my gourmet burger fix.</p>
+      </div>
+      <div class="testimonial reveal reveal-delay-2">
+        <div class="testimonial-avatar-placeholder">👨🏼</div>
+        <h3>Brock, new in town</h3>
+        <p>I stumbled upon TSB when I was exploring my new neighborhood. Everyone was so friendly, and the food was delish! Will be back.</p>
+      </div>
+      <div class="testimonial reveal reveal-delay-3">
+        <div class="testimonial-avatar-placeholder">👩🏽</div>
+        <h3>Steffi, lives around the corner</h3>
+        <p>So glad to have a neighborhood café, hangout spot, and bar all in one and nearby! Comfort food in a comforting atmosphere — need I say more?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <h2 class="reveal">Swing by soon!</h2>
+    <div class="footer-info reveal reveal-delay-1">
+      <div class="footer-block">
+        <h4>The Sunday Bite</h4>
+        <p>123 Anywhere St., Any City, State, Country 12345</p>
+      </div>
+      <div class="footer-block">
+        <h4>Email Address</h4>
+        <a href="mailto:hello@reallygreasite.com">hello@reallygreasite.com</a>
+      </div>
+      <div class="footer-block">
+        <h4>Phone Number</h4>
+        <a href="tel:+12314567890">(123) 456-7890</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-triggered nav shadow
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
